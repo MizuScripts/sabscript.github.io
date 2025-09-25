@@ -1,128 +1,239 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MizuHub</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet">
-  <style>
-    body {
-      margin: 0;
-      height: 100vh;
-      background: radial-gradient(circle at top, #0f2027, #203a43, #2c5364);
-      color: #fff;
-      font-family: 'Orbitron', sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      overflow: hidden;
-    }
-    .container {
-      text-align: center;
-      background: rgba(0, 0, 0, 0.6);
-      padding: 30px;
-      border-radius: 15px;
-      width: 90%;
-      max-width: 700px;
-      box-shadow: 0 0 20px rgba(0,255,255,0.4);
-    }
-    .title {
-      font-size: 2.5em;
-      margin-bottom: 5px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-    }
-    .title img {
-      width: 40px;
-      height: 40px;
-    }
-    .subtitle {
-      font-size: 1em;
-      color: #aaa;
-      margin-bottom: 15px;
-    }
-    .icons {
-      margin-bottom: 20px;
-    }
-    .icons a {
-      margin: 0 10px;
-      display: inline-block;
-      transition: transform 0.2s;
-    }
-    .icons a:hover {
-      transform: scale(1.2);
-    }
-    .icons img {
-      width: 35px;
-      height: 35px;
-      filter: drop-shadow(0 0 5px rgba(0,255,255,0.6));
-    }
-    .script-box {
-      width: 100%;
-      height: 180px; /* little smaller */
-      background: rgba(20, 20, 20, 0.8);
-      color: #0ff;
-      border: 1px solid #0ff;
-      border-radius: 10px;
-      padding: 10px;
-      text-align: left;
-      overflow-y: auto;
-      font-family: monospace;
-      font-size: 14px;
-      white-space: pre-wrap;
-      word-break: break-word;
-    }
-    .copy-btn {
-      margin-top: 15px;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 8px;
-      font-size: 1em;
-      background: linear-gradient(135deg, #0ff, #08f);
-      color: black;
-      font-weight: bold;
-      cursor: pointer;
-      transition: transform 0.2s, background 0.3s;
-    }
-    .copy-btn:hover {
-      transform: scale(1.05);
-      background: linear-gradient(135deg, #08f, #0ff);
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MizuHub</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;font-family:'Orbitron',sans-serif;}
+  body{
+    background:#000;
+    color:#fff;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+    text-align:center;
+    overflow:hidden;
+  }
+
+  h1{
+    font-size:3em;
+    color:white;
+    text-shadow:0 0 10px #fff,0 0 20px #fff;
+    margin-bottom:10px;
+  }
+
+  .logo{
+    width:80px;
+    height:80px;
+    margin-bottom:20px;
+  }
+
+  .script-container{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:20px;
+    width:90%;
+    max-width:700px;
+  }
+
+  .script-box {
+    flex:1;
+    height:180px;
+    background: rgba(20, 20, 20, 0.8);
+    color:#0ff;
+    border:1px solid #0ff;
+    border-radius:10px;
+    padding:10px;
+    text-align:left;
+    overflow-y:auto;
+    font-family:monospace;
+    font-size:14px;
+    white-space:pre-wrap;
+    word-break:break-word;
+  }
+
+  .copy-btn{
+    padding:10px 20px;
+    border:none;
+    border-radius:8px;
+    font-size:1em;
+    background:linear-gradient(135deg,#0ff,#08f);
+    color:black;
+    font-weight:bold;
+    cursor:pointer;
+    transition: transform 0.2s, background 0.3s;
+    height:40px;
+  }
+  .copy-btn:hover{
+    transform:scale(1.05);
+    background:linear-gradient(135deg,#08f,#0ff);
+  }
+
+  footer{
+    font-size:0.9em;
+    color:#aaa;
+    text-shadow:0 0 5px #0ff;
+    margin-top:20px;
+  }
+
+  /* Notification */
+  .notification{
+    position:fixed;
+    top:20px;
+    left:50%;
+    transform:translateX(-50%);
+    background:white;
+    color:#000;
+    padding:12px 20px 16px;
+    border-radius:12px;
+    box-shadow:0 0 15px #0ff;
+    opacity:0;
+    transition:0.4s;
+    z-index:9999;
+    width:260px;
+    text-align:center;
+  }
+  .notification.show{opacity:1;}
+
+  .progress-bar{
+    width:100%;
+    height:6px;
+    background:rgba(0,0,0,0.2);
+    border-radius:4px;
+    margin-top:8px;
+    overflow:hidden;
+  }
+  .progress{
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg,#0ff,#08f);
+    transition:width 0.1s linear;
+  }
+
+  canvas{
+    position:fixed;
+    top:0; left:0;
+    width:100%; height:100%;
+    z-index:-1;
+  }
+
+  @media(max-width:500px){
+    h1{font-size:2em}
+    .script-container{flex-direction:column;gap:10px}
+    .copy-btn{width:100%;}
+  }
+</style>
 </head>
 <body>
-  <div class="container">
-    <div class="title">
-      <img src="https://cdn-icons-png.flaticon.com/512/5968/5968267.png" alt="icon">
-      <span>MizuHub</span>
-    </div>
-    <div class="subtitle">Your Best Scripters</div>
 
-    <div class="icons">
-      <a href="https://discord.gg/mxSvSpJe7s" target="_blank">
-        <img src="https://cdn-icons-png.flaticon.com/512/2111/2111370.png" alt="Discord">
-      </a>
-      <a href="https://youtube.com/@mizuscripts" target="_blank">
-        <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" alt="YouTube">
-      </a>
-    </div>
+<h1>MizuHub</h1>
+<img src="https://cdn-icons-png.flaticon.com/512/5968/5968267.png" alt="Logo" class="logo">
 
-    <div class="script-box" id="scriptBox">
+<div class="script-container">
+  <button class="copy-btn" onclick="copyScript()">Copy Script</button>
+  <div class="script-box" id="scriptBox">
 loadstring(game:HttpGet("https://raw.githubusercontent.com/MizuScripts/MizuSpawner-v2/refs/heads/main/Testtest.lua"))()
-    </div>
-
-    <button class="copy-btn" onclick="copyScript()">Copy Script</button>
   </div>
+</div>
 
-  <script>
-    function copyScript() {
-      const scriptText = document.getElementById('scriptBox').innerText;
-      navigator.clipboard.writeText(scriptText).then(() => {
-        alert("Script copied to clipboard!");
-      });
+<footer>Website By: @mizuscripts</footer>
+
+<!-- Notification -->
+<div class="notification" id="notification">
+  <span id="notifText"></span>
+  <div class="progress-bar"><div class="progress" id="progress"></div></div>
+</div>
+
+<canvas id="stars"></canvas>
+
+<script>
+function copyScript(){
+  const scriptText = document.getElementById('scriptBox').innerText;
+  navigator.clipboard.writeText(scriptText).then(()=>{
+    showNotification("Script copied to clipboard!");
+  });
+}
+
+// Notification system
+const notification = document.getElementById('notification');
+const notifText = document.getElementById('notifText');
+const progress = document.getElementById('progress');
+let notifActive = false;
+
+function showNotification(text){
+  if(notifActive) return;
+  notifActive = true;
+  notifText.textContent = text;
+  notification.classList.add('show');
+  progress.style.width="0%";
+  let width=0;
+  let interval = setInterval(()=>{
+    width += 100 / (3500/50);
+    progress.style.width = width + "%";
+    if(width>=100){
+      clearInterval(interval);
+      notification.classList.remove('show');
+      notifActive=false;
     }
-  </script>
+  },50);
+}
+
+// Stars animation
+const canvas = document.getElementById('stars');
+const ctx = canvas.getContext('2d');
+let stars = [];
+let w,h;
+
+function initCanvas(){
+  w = canvas.width = window.innerWidth;
+  h = canvas.height = window.innerHeight;
+  stars=[];
+  for(let i=0;i<200;i++){
+    stars.push({x:Math.random()*w,y:Math.random()*h,r:Math.random()*1.5,d:Math.random()*1.5});
+  }
+}
+
+function drawStars(){
+  ctx.clearRect(0,0,w,h);
+  ctx.fillStyle="white";
+  ctx.beginPath();
+  for(let i=0;i<stars.length;i++){
+    let s=stars[i];
+    ctx.moveTo(s.x,s.y);
+    ctx.arc(s.x,s.y,s.r,0,Math.PI*2,true);
+  }
+  ctx.fill();
+  moveStars();
+}
+
+let angle=0;
+function moveStars(){
+  angle+=0.01;
+  for(let i=0;i<stars.length;i++){
+    let s=stars[i];
+    s.x += Math.sin(angle+s.d)*0.5;
+    s.y += Math.cos(angle+s.d)*0.5;
+    if(s.x<0)s.x=w;
+    if(s.x>w)s.x=0;
+    if(s.y<0)s.y=h;
+    if(s.y>h)s.y=0;
+  }
+}
+
+function animate(){
+  drawStars();
+  requestAnimationFrame(animate);
+}
+
+window.addEventListener('resize',initCanvas);
+initCanvas();
+animate();
+</script>
+
 </body>
 </html>
